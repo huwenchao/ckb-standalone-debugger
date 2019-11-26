@@ -38,6 +38,10 @@ impl MockResourceLoader for DummyResourceLoader {
     }
 }
 
+fn print(script_hash: &Byte32, debug_info: &str) {
+    dbg!(script_hash, debug_info);
+}
+
 pub fn run(
     mock_tx: &MockTransaction,
     script_group_type: &ScriptGroupType,
@@ -55,6 +59,8 @@ pub fn run(
     let mut verifier = TransactionScriptsVerifier::new(&rtx, &resource);
     if let Some(debug_printer) = debug_printer {
         verifier.set_debug_printer(debug_printer);
+    } else {
+        verifier.set_debug_printer(print);
     }
     verifier
         .verify_single(script_group_type, script_hash, max_cycle)
